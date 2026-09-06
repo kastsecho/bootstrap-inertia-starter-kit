@@ -56,7 +56,7 @@ return [
         'storage' => [
             'driver' => 'storage',
             'disk' => env('CACHE_STORAGE_DISK'),
-            'path' => env('CACHE_STORAGE_PATH', 'framework/cache/data'),
+            'path' => env('CACHE_STORAGE_PATH', 'framework/cache/locks'),
         ],
 
         'memcached' => [

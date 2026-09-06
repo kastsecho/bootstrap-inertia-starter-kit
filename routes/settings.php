@@ -1,0 +1,34 @@
+<?php
+
+use App\Http\Controllers\Settings\AppearanceController;
+use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\Settings\SecurityController;
+use Illuminate\Support\Facades\Route;
+
+Route::middleware(['auth'])->group(function () {
+    Route::redirect('settings', '/settings/profile')
+        ->name('settings');
+
+    Route::get('settings/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::delete('settings/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
+
+    Route::get('settings/security', [SecurityController::class, 'edit'])
+        ->name('security.edit');
+
+    Route::get('settings/appearance', [AppearanceController::class, 'edit'])
+        ->name('appearance.edit');
+});
+
+/* @chisel-passkeys */
+Route::get('.well-known/passkey-endpoints', function () {
+    return response()->json([
+        'enroll' => route('security.edit'),
+        'manage' => route('security.edit'),
+    ]);
+})->name('well-known.passkeys');
+/* @end-chisel-passkeys */
