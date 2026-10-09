@@ -4,6 +4,7 @@ import { initializeFlashToast } from '@/composables/useFlashToast';
 import AppLayout from '@/layouts/AppLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
+import { appDirectives } from '@/lib/directives';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -22,12 +23,8 @@ void createInertiaApp({
         }
     },
     withApp: (app) => {
-        app.directive('focus', {
-            mounted: (el: HTMLElement, shouldFocus) => {
-                if (shouldFocus.value !== false) {
-                    el.focus();
-                }
-            },
+        Object.entries(appDirectives).forEach(([name, directive]) => {
+            app.directive(name, directive);
         });
     },
     progress: {

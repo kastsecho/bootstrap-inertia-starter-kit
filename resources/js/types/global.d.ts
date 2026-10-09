@@ -1,4 +1,10 @@
 import type { Directive } from 'vue';
+import type {
+    ComboboxOptions,
+    DialogOptions,
+    ToastOptions,
+    TooltipOptions,
+} from '@/lib/directives';
 import type { Auth } from '@/types/auth';
 
 // Extend ImportMeta interface for Vite...
@@ -27,6 +33,13 @@ declare module '@inertiajs/core' {
 declare module 'vue' {
     interface GlobalDirectives {
         vFocus: Directive<HTMLElement, boolean | undefined>;
+        vCombobox: Directive<HTMLElement, ComboboxOptions>;
+        vDialog: Directive<HTMLElement, DialogOptions>;
+        vOtp: Directive<HTMLElement>;
+        vDrawer: Directive<HTMLElement>;
+        vMenu: Directive<HTMLElement, string | undefined>;
+        vToast: Directive<HTMLElement, ToastOptions>;
+        vTooltip: Directive<HTMLElement, TooltipOptions>;
     }
 
     interface ComponentCustomProperties {

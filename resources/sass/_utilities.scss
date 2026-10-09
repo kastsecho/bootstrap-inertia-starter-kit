@@ -1,0 +1,35 @@
+@use 'sass:map';
+@use 'bootstrap/scss/config' as *;
+@use 'bootstrap/scss/utilities';
+
+// Icons
+$icon-size-base: 1rem !default;
+$icon-size-sm: $icon-size-base * 0.875 !default;
+$icon-size-lg: $icon-size-base * 1.25 !default;
+$icon-size-xl: $icon-size-base * 1.5 !default;
+$icon-size-xxl: $icon-size-base * 2 !default;
+
+$utilities: map.merge(
+    $utilities,
+    (
+        'icon': (
+            property: width height font-size,
+            class: icon,
+            values: (
+                sm: $icon-size-sm,
+                null: $icon-size-base,
+                lg: $icon-size-lg,
+                xl: $icon-size-xl,
+                2xl: $icon-size-xxl,
+            ),
+        ),
+    )
+);
+
+.min-w-56 {
+    min-width: 14rem;
+}
+
+.max-w-\[120px\] {
+    max-width: 120px;
+}

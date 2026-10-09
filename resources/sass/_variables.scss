@@ -1,0 +1,21 @@
+$body-font-family:
+    'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+$body-font-size: 0.9rem;
+$body-line-height: 1.6;
+
+// Colors
+$colors: (
+    'blue': #3490dc,
+    'indigo': #6574cd,
+    'purple': #9561e2,
+    'pink': #f66d9b,
+    'red': #e3342f,
+    'yellow': #f6993f,
+    'green': #38c172,
+    'teal': #4dc0b5,
+    'cyan': #6cb2eb,
+);
+
+// Utilities
+@forward 'utilities';

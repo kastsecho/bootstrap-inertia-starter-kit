@@ -1,0 +1,13 @@
+// Variables
+@use 'variables';
+
+// Bootstrap
+@use 'bootstrap/scss/bootstrap' with (
+    $colors: variables.$colors
+);
+
+:root {
+    --body-font-family: #{variables.$body-font-family};
+    --body-font-size: #{variables.$body-font-size};
+    --body-line-height: #{variables.$body-line-height};
+}
