@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import AppContent from '@/components/AppContent.vue';
+import AppHeader from '@/components/AppHeader.vue';
+import AppShell from '@/components/AppShell.vue';
+import { Toaster } from '@/components/ui/toast';
 import type { BreadcrumbItem } from '@/types';
 
 type Props = {
@@ -11,5 +15,11 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-    <div>App Header Layout</div>
+    <AppShell variant="header">
+        <AppHeader :breadcrumbs="breadcrumbs" />
+        <AppContent variant="header">
+            <slot />
+        </AppContent>
+        <Toaster class="position-fixed end-0 bottom-0 p-5" variant="compact" />
+    </AppShell>
 </template>
