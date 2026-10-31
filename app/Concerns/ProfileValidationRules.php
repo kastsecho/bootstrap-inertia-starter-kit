@@ -49,4 +49,14 @@ trait ProfileValidationRules
                 : Rule::unique(User::class)->ignore($userId),
         ];
     }
+
+    /**
+     * Get the validation rules used to validate user profile photos.
+     *
+     * @return array<int, Unique|ValidationRule|array<mixed>|string>
+     */
+    protected function profilePhotoRules(): array
+    {
+        return ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'];
+    }
 }

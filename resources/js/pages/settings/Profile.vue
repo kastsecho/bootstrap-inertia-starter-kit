@@ -7,6 +7,7 @@ import InputError from '@/components/InputError.vue';
 /* @chisel-email-verification */
 import TextLink from '@/components/TextLink.vue';
 /* @end-chisel-email-verification */
+import UpdateAvatar from '@/components/UpdateAvatar.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -46,6 +47,17 @@ const user = computed(() => page.props.auth.user);
             class="space-y-5"
             v-slot="{ errors, processing }"
         >
+            <div class="d-grid form-field">
+                <Label for="photo">Avatar</Label>
+                <div class="d-flex align-items-center gap-5">
+                    <UpdateAvatar :user="user" :disabled="processing" />
+                </div>
+                <InputError
+                    :class="{ ['d-block']: errors.photo }"
+                    :message="errors.photo"
+                />
+            </div>
+
             <div class="d-grid form-field">
                 <Label for="name">Name</Label>
                 <Input
