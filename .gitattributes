@@ -7,4 +7,5 @@
 *.php diff=php
 
 CHANGELOG.md export-ignore
+PREVIEW.png export-ignore
 README.md export-ignore
