@@ -7,15 +7,26 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
+use Inertia\ExceptionResponse;
+use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /** @var array<int> */
+    protected array $statusCodes = [401, 402, 403, 404, 419, 429, 500, 503];
+
     /**
      * Register any application services.
      */
     public function register(): void
     {
-        //
+        Inertia::handleExceptionsUsing(function (ExceptionResponse $response) {
+            if (in_array($response->statusCode(), $this->statusCodes)) {
+                return $response->render('Error', [
+                    'status' => $response->statusCode(),
+                ])->withSharedData();
+            }
+        });
     }
 
     /**
