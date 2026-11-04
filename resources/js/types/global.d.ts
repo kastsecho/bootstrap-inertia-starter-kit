@@ -6,6 +6,7 @@ import type {
     TooltipOptions,
 } from '@/lib/directives';
 import type { Auth } from '@/types/auth';
+import type { Team } from '@/types/teams';
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {
@@ -25,6 +26,8 @@ declare module '@inertiajs/core' {
         sharedPageProps: {
             name: string;
             auth: Auth;
+            currentTeam: Team | null;
+            teams: Team[];
             [key: string]: unknown;
         };
     }

@@ -63,7 +63,7 @@ class EmailVerificationTest extends TestCase
         Event::assertDispatched(Verified::class);
 
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
-        $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+        $response->assertRedirect('/dashboard?verified=1');
     }
 
     #[Test]
@@ -120,7 +120,7 @@ class EmailVerificationTest extends TestCase
             ->get(route('verification.notice'));
 
         Event::assertNotDispatched(Verified::class);
-        $response->assertRedirect(route('dashboard', absolute: false));
+        $response->assertRedirect('/dashboard');
     }
 
     #[Test]
@@ -141,7 +141,7 @@ class EmailVerificationTest extends TestCase
             ->get($verificationUrl);
 
         Event::assertNotDispatched(Verified::class);
-        $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+        $response->assertRedirect('/dashboard?verified=1');
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
     }
 }

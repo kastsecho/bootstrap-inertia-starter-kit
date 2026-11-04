@@ -13,6 +13,7 @@ import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
+import TeamSwitcher from '@/components/TeamSwitcher.vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ButtonClose } from '@/components/ui/button';
 import {
@@ -54,14 +55,18 @@ const auth = computed(() => page.props.auth);
 const avatarKey = computed(() => auth.value.user.avatar || 'fallback');
 const { isCurrentUrl } = useCurrentUrl();
 
-const mainNavItems: NavItem[] = [
+const dashboardUrl = computed(() =>
+    page.props.currentTeam ? dashboard(page.props.currentTeam.slug).url : '/',
+);
+
+const mainNavItems = computed<NavItem[]>(() => [
     {
         title: 'Dashboard',
-        href: dashboard(),
+        href: dashboardUrl.value,
         icon: LayoutGrid,
         isActive: !!auth.value.user,
     },
-];
+]);
 
 const rightNavItems: NavItem[] = [
     {
@@ -196,33 +201,39 @@ const rightNavItems: NavItem[] = [
                                 <!-- @end-chisel-registration -->
                             </template>
 
-                            <DropdownMenu v-else variant="nav-item">
-                                <DropdownMenuTrigger
-                                    type="button"
-                                    class="nav-link"
-                                    align="bottom-end"
-                                    :caret="false"
-                                >
-                                    <Avatar
-                                        :key="avatarKey"
-                                        size="xs"
-                                        status="online"
+                            <template v-else>
+                                <DropdownMenu variant="nav-item">
+                                    <DropdownMenuTrigger
+                                        type="button"
+                                        class="nav-link"
+                                        align="bottom-end"
+                                        :caret="false"
                                     >
-                                        <AvatarImage
-                                            v-if="auth.user.avatar"
-                                            :src="auth.user.avatar"
-                                            :alt="auth.user.name"
-                                        />
-                                        <AvatarFallback>
-                                            {{ getInitials(auth.user?.name) }}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                </DropdownMenuTrigger>
+                                        <Avatar
+                                            :key="avatarKey"
+                                            size="xs"
+                                            status="online"
+                                        >
+                                            <AvatarImage
+                                                v-if="auth.user.avatar"
+                                                :src="auth.user.avatar"
+                                                :alt="auth.user.name"
+                                            />
+                                            <AvatarFallback>
+                                                {{
+                                                    getInitials(auth.user?.name)
+                                                }}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </DropdownMenuTrigger>
 
-                                <DropdownMenuContent class="min-w-56">
-                                    <UserMenuContent :user="auth.user" />
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                                    <DropdownMenuContent class="min-w-56">
+                                        <UserMenuContent :user="auth.user" />
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+
+                                <TeamSwitcher :in-header="true" />
+                            </template>
                         </NavigationMenuList>
                     </SheetContent>
                 </Sheet>

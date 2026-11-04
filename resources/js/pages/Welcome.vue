@@ -32,6 +32,9 @@ defineProps<{
 const page = usePage();
 const appName = computed(() => page.props.name);
 const auth = computed(() => page.props.auth);
+const dashboardUrl = computed(() =>
+    page.props.currentTeam ? dashboard(page.props.currentTeam.slug).url : '/',
+);
 
 const mainNavItems: NavItem[] = [
     {
@@ -92,7 +95,7 @@ const mainNavItems: NavItem[] = [
                             <NavigationMenuItem v-if="auth.user">
                                 <NavigationMenuLink
                                     :as="Link"
-                                    :href="dashboard()"
+                                    :href="dashboardUrl"
                                 >
                                     Dashboard
                                 </NavigationMenuLink>
