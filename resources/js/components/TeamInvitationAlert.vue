@@ -16,7 +16,7 @@ defineProps<Props>();
         <Alert class="d-flex align-items-center gap-5" theme="default">
             <Info class="icon" />
             <AlertDescription class="mb-0">
-                {{ action }} to join the "{{ invitation.teamName }}" Team.
+                {{ action }} to join the "{{ invitation.teamName }}" team.
             </AlertDescription>
         </Alert>
     </div>
