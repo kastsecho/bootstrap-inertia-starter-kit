@@ -5,6 +5,7 @@ namespace Tests\Feature\Teams;
 use App\Enums\TeamRole;
 use App\Models\Team;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
@@ -74,7 +75,13 @@ class TeamTest extends TestCase
             ->actingAs($user)
             ->get(route('teams.edit', $team));
 
-        $response->assertOk();
+        $response
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('teams/Edit')
+                ->where('members.0.role', TeamRole::Owner->value)
+                ->where('members.0.role_label', TeamRole::Owner->label()),
+            );
     }
 
     #[Test]
