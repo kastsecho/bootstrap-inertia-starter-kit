@@ -169,6 +169,99 @@ class TeamTest extends TestCase
     }
 
     #[Test]
+    public function members_can_leave_non_personal_teams(): void
+    {
+        $owner = User::factory()->create();
+        $member = User::factory()->create();
+        $team = Team::factory()->create();
+
+        $team->members()->attach($owner, ['role' => TeamRole::Owner->value]);
+        $team->members()->attach($member, ['role' => TeamRole::Member->value]);
+
+        $response = $this
+            ->actingAs($member)
+            ->delete(route('teams.leave', $team));
+
+        $response->assertRedirect(route('teams.index'));
+        $response->assertInertiaFlash('toast', ['type' => 'success', 'message' => "You left the team \"{$team->name}\""]);
+
+        $this->assertFalse($member->fresh()->belongsToTeam($team));
+    }
+
+    #[Test]
+    public function leaving_current_team_switches_to_alphabetically_first_remaining_team(): void
+    {
+        $owner = User::factory()->create();
+        $member = User::factory()->create(['name' => 'Mike']);
+
+        $zuluTeam = Team::factory()->create(['name' => 'Zulu Team']);
+        $zuluTeam->members()->attach($owner, ['role' => TeamRole::Owner->value]);
+        $zuluTeam->members()->attach($member, ['role' => TeamRole::Member->value]);
+
+        $alphaTeam = Team::factory()->create(['name' => 'Alpha Team']);
+        $alphaTeam->members()->attach($member, ['role' => TeamRole::Member->value]);
+
+        $betaTeam = Team::factory()->create(['name' => 'Beta Team']);
+        $betaTeam->members()->attach($member, ['role' => TeamRole::Member->value]);
+
+        $member->update(['current_team_id' => $zuluTeam->id]);
+
+        $response = $this
+            ->actingAs($member)
+            ->delete(route('teams.leave', $zuluTeam));
+
+        $response->assertRedirect(route('teams.index'));
+
+        $this->assertFalse($member->fresh()->belongsToTeam($zuluTeam));
+        $this->assertEquals($alphaTeam->id, $member->fresh()->current_team_id);
+    }
+
+    #[Test]
+    public function personal_teams_cannot_be_left(): void
+    {
+        $user = User::factory()->create();
+        $personalTeam = $user->personalTeam();
+
+        $response = $this
+            ->actingAs($user)
+            ->delete(route('teams.leave', $personalTeam));
+
+        $response->assertForbidden();
+
+        $this->assertTrue($user->fresh()->belongsToTeam($personalTeam));
+    }
+
+    #[Test]
+    public function team_owners_cannot_leave_their_team(): void
+    {
+        $owner = User::factory()->create();
+        $team = Team::factory()->create();
+
+        $team->members()->attach($owner, ['role' => TeamRole::Owner->value]);
+
+        $response = $this
+            ->actingAs($owner)
+            ->delete(route('teams.leave', $team));
+
+        $response->assertForbidden();
+
+        $this->assertTrue($owner->fresh()->belongsToTeam($team));
+    }
+
+    #[Test]
+    public function users_cannot_leave_teams_they_dont_belong_to(): void
+    {
+        $user = User::factory()->create();
+        $team = Team::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->delete(route('teams.leave', $team));
+
+        $response->assertForbidden();
+    }
+
+    #[Test]
     public function deleting_current_team_switches_to_alphabetically_first_remaining_team(): void
     {
         $user = User::factory()->create(['name' => 'Mike']);

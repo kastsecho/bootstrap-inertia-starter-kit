@@ -40,6 +40,8 @@ Route::middleware([
             ->name('teams.destroy');
         Route::post('settings/teams/{team}/switch', [TeamController::class, 'switch'])
             ->name('teams.switch');
+        Route::delete('settings/teams/{team}/leave', [TeamController::class, 'leave'])
+            ->name('teams.leave');
 
         Route::patch('settings/teams/{team}/members/{user}', [TeamMemberController::class, 'update'])
             ->name('teams.members.update');
