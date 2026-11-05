@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { Head, Link, setLayoutProps } from '@inertiajs/vue3';
-import { Eye, Pencil, Plus } from '@lucide/vue';
+import { Eye, LogOut, Pencil, Plus } from '@lucide/vue';
+import { ref } from 'vue';
 import CreateTeamModal from '@/components/CreateTeamModal.vue';
 import Heading from '@/components/Heading.vue';
+import LeaveTeamModal from '@/components/LeaveTeamModal.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tooltip } from '@/components/ui/tooltip';
@@ -22,6 +24,16 @@ setLayoutProps({
         },
     ],
 });
+
+const leaveTeamDialogOpen = ref(false);
+const teamLeaving = ref<Team | null>(null);
+
+const canLeaveTeam = (team: Team) => !team.isPersonal && team.role !== 'owner';
+
+const openLeaveTeamDialog = (team: Team) => {
+    teamLeaving.value = team;
+    leaveTeamDialogOpen.value = true;
+};
 </script>
 
 <template>
@@ -67,6 +79,21 @@ setLayoutProps({
 
                 <div class="flex items-center gap-2">
                     <Tooltip
+                        v-if="canLeaveTeam(team)"
+                        content="Leave team"
+                        placement="left"
+                    >
+                        <Button
+                            data-test="team-leave-button"
+                            variant="text"
+                            size="icon-sm"
+                            @click="openLeaveTeamDialog(team)"
+                        >
+                            <LogOut class="icon" />
+                        </Button>
+                    </Tooltip>
+
+                    <Tooltip
                         v-if="team.role === 'member'"
                         content="View team"
                         placement="left"
@@ -103,4 +130,6 @@ setLayoutProps({
             You don't belong to any teams yet.
         </p>
     </div>
+
+    <LeaveTeamModal v-model:open="leaveTeamDialogOpen" :team="teamLeaving" />
 </template>
