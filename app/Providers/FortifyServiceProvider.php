@@ -19,6 +19,7 @@ use App\Http\Responses\TwoFactorLoginResponse;
 /* @chisel-email-verification */
 use App\Http\Responses\VerifyEmailResponse;
 /* @end-chisel-email-verification */
+use App\Models\TeamInvitation;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -99,6 +100,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::loginView(fn (Request $request) => inertia($prefix.'/Login', [
             'canResetPassword' => Features::enabled(Features::resetPasswords()),
             'status' => $request->session()->get('status'),
+            'teamInvitation' => $this->teamInvitation($request),
         ]));
 
         /* @chisel-2fa */
@@ -106,8 +108,9 @@ class FortifyServiceProvider extends ServiceProvider
         /* @end-chisel-2fa */
 
         /* @chisel-registration */
-        Fortify::registerView(fn () => inertia($prefix.'/Register', [
+        Fortify::registerView(fn (Request $request) => inertia($prefix.'/Register', [
             'passwordRules' => Password::defaults()->toPasswordRulesString(),
+            'teamInvitation' => $this->teamInvitation($request),
         ]));
         /* @end-chisel-registration */
 
@@ -156,5 +159,37 @@ class FortifyServiceProvider extends ServiceProvider
             );
         });
         /* @end-chisel-passkeys */
+    }
+
+    /**
+     * Get the pending team invitation context for auth pages.
+     *
+     * @return array{code: string, teamName: string}|null
+     */
+    private function teamInvitation(Request $request): ?array
+    {
+        $invitationCode = $request->query('invitation');
+
+        if (! is_string($invitationCode)) {
+            return null;
+        }
+
+        $invitation = TeamInvitation::query()
+            ->with('team')
+            ->where('code', $invitationCode)
+            ->whereNull('accepted_at')
+            ->where(fn ($query) => $query
+                ->whereNull('expires_at')
+                ->orWhere('expires_at', '>=', now()))
+            ->first();
+
+        if (! $invitation) {
+            return null;
+        }
+
+        return [
+            'code' => $invitation->code,
+            'teamName' => $invitation->team->name,
+        ];
     }
 }

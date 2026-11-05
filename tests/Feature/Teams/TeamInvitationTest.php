@@ -6,6 +6,7 @@ use App\Enums\TeamRole;
 use App\Models\Team;
 use App\Models\TeamInvitation;
 use App\Models\User;
+use App\Notifications\Teams\TeamInvitation as TeamInvitationNotification;
 use Illuminate\Support\Facades\Notification;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
@@ -36,6 +37,47 @@ class TeamInvitationTest extends TestCase
             'email' => 'invited@example.com',
             'role' => TeamRole::Member->value,
         ]);
+    }
+
+    #[Test]
+    public function invitation_email_for_existing_users_uses_login_route(): void
+    {
+        $owner = User::factory()->create();
+        $invitedUser = User::factory()->create(['email' => 'invited@example.com']);
+        $team = Team::factory()->create();
+
+        $team->members()->attach($owner, ['role' => TeamRole::Owner->value]);
+
+        $invitation = TeamInvitation::factory()->create([
+            'team_id' => $team->id,
+            'email' => $invitedUser->email,
+            'invited_by' => $owner->id,
+        ]);
+
+        $mail = (new TeamInvitationNotification($invitation))->toMail($invitedUser);
+
+        $this->assertSame(route('login', ['invitation' => $invitation->code]), $mail->actionUrl);
+        $this->assertStringContainsString('dashboard', implode(' ', $mail->introLines));
+    }
+
+    #[Test]
+    public function invitation_email_for_unknown_users_uses_login_route(): void
+    {
+        $owner = User::factory()->create();
+        $team = Team::factory()->create();
+
+        $team->members()->attach($owner, ['role' => TeamRole::Owner->value]);
+
+        $invitation = TeamInvitation::factory()->create([
+            'team_id' => $team->id,
+            'email' => 'unknown@example.com',
+            'invited_by' => $owner->id,
+        ]);
+
+        $mail = (new TeamInvitationNotification($invitation))->toMail((object) []);
+
+        $this->assertSame(route('login', ['invitation' => $invitation->code]), $mail->actionUrl);
+        $this->assertStringContainsString('log in', strtolower(implode(' ', $mail->introLines)));
     }
 
     #[Test]

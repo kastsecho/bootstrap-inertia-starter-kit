@@ -2,14 +2,17 @@
 import { Form, Head, setLayoutProps } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
+import TeamInvitationAlert from '@/components/TeamInvitationAlert.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { store } from '@/routes/register';
+import type { TeamInvitationContext } from '@/types';
 
 defineProps<{
     passwordRules: string;
+    teamInvitation?: TeamInvitationContext | null;
 }>();
 
 setLayoutProps({
@@ -20,6 +23,12 @@ setLayoutProps({
 
 <template>
     <Head title="Register" />
+
+    <TeamInvitationAlert
+        v-if="teamInvitation"
+        :invitation="teamInvitation"
+        action="Register"
+    />
 
     <Form
         v-bind="store.form()"

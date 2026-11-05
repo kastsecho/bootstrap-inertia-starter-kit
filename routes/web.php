@@ -19,6 +19,8 @@ Route::get('/up', HealthCheckController::class)
 Route::middleware(['auth'])->group(function () {
     Route::get('invitations/{invitation}/accept', [TeamInvitationController::class, 'accept'])
         ->name('invitations.accept');
+    Route::delete('invitations/{invitation}', [TeamInvitationController::class, 'decline'])
+        ->name('invitations.decline');
 });
 
 require base_path('routes/settings.php');

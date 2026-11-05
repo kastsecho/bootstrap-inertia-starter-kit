@@ -112,7 +112,6 @@ function handleOpenChange(value: boolean) {
 
                 <Button
                     type="submit"
-                    theme="inverse"
                     data-test="invite-submit"
                     :disabled="processing"
                 >

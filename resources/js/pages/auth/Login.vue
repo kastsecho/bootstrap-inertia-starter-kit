@@ -2,6 +2,10 @@
 import { Form, Head, setLayoutProps } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';
+/* @chisel-passkeys */
+import PasskeyVerify from '@/components/PasskeyVerify.vue';
+/* @end-chisel-passkeys */
+import TeamInvitationAlert from '@/components/TeamInvitationAlert.vue';
 import TextLink from '@/components/TextLink.vue';
 import { Alert } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
@@ -11,13 +15,12 @@ import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
-/* @chisel-passkeys */
-import PasskeyVerify from '@/components/PasskeyVerify.vue';
-/* @end-chisel-passkeys */
+import type { TeamInvitationContext } from '@/types';
 
 defineProps<{
     status?: string;
     canResetPassword: boolean;
+    teamInvitation?: TeamInvitationContext | null;
 }>();
 
 setLayoutProps({
@@ -32,6 +35,12 @@ setLayoutProps({
     <Alert v-if="status" theme="success" class="fw-medium mb-3 text-sm">
         <p class="mx-auto">{{ status }}</p>
     </Alert>
+
+    <TeamInvitationAlert
+        v-if="teamInvitation"
+        :invitation="teamInvitation"
+        action="Log in"
+    />
 
     <!-- @chisel-passkeys -->
     <PasskeyVerify />
