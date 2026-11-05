@@ -47,6 +47,7 @@ class EmailVerificationTest extends TestCase
     public function email_can_be_verified(): void
     {
         $user = User::factory()->unverified()->create();
+        $team = $user->personalTeam();
 
         Event::fake();
 
@@ -63,7 +64,7 @@ class EmailVerificationTest extends TestCase
         Event::assertDispatched(Verified::class);
 
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
-        $response->assertRedirect('/dashboard?verified=1');
+        $response->assertRedirect("/{$team->slug}/dashboard?verified=1");
     }
 
     #[Test]
@@ -127,6 +128,7 @@ class EmailVerificationTest extends TestCase
     public function already_verified_user_visiting_verification_link_is_redirected_without_firing_event_again(): void
     {
         $user = User::factory()->create();
+        $team = $user->personalTeam();
 
         Event::fake();
 
@@ -141,7 +143,7 @@ class EmailVerificationTest extends TestCase
             ->get($verificationUrl);
 
         Event::assertNotDispatched(Verified::class);
-        $response->assertRedirect('/dashboard?verified=1');
+        $response->assertRedirect("/{$team->slug}/dashboard?verified=1");
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
     }
 }
