@@ -211,7 +211,7 @@ class TeamInvitationTest extends TestCase
 
         $response = $this
             ->actingAs($invitedUser)
-            ->get(route('invitations.accept', $invitation));
+            ->post(route('invitations.accept', $invitation));
 
         $response->assertRedirect(route('dashboard'));
 
@@ -236,7 +236,7 @@ class TeamInvitationTest extends TestCase
 
         $response = $this
             ->actingAs($uninvitedUser)
-            ->get(route('invitations.accept', $invitation));
+            ->post(route('invitations.accept', $invitation));
 
         $response->assertInvalid('invitation');
 
@@ -260,7 +260,7 @@ class TeamInvitationTest extends TestCase
 
         $response = $this
             ->actingAs($invitedUser)
-            ->get(route('invitations.accept', $invitation));
+            ->post(route('invitations.accept', $invitation));
 
         $response->assertInvalid('invitation');
 
