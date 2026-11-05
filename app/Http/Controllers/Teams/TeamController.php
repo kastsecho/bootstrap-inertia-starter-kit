@@ -38,6 +38,8 @@ class TeamController extends Controller
     {
         $team = $createTeam->handle($request->user(), $request->validated('name'));
 
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Team created.')]);
+
         return to_route('teams.edit', ['team' => $team->slug]);
     }
 
@@ -95,6 +97,8 @@ class TeamController extends Controller
             return $team;
         });
 
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Team updated.')]);
+
         return to_route('teams.edit', ['team' => $team->slug]);
     }
 
@@ -134,8 +138,9 @@ class TeamController extends Controller
 
         if ($fallbackTeam) {
             $user->switchTeam($fallbackTeam);
-
         }
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Team deleted.')]);
 
         return to_route('teams.index');
     }
