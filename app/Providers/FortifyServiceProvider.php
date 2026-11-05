@@ -7,8 +7,15 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Http\Responses\LoginResponse;
+/* @chisel-passkeys */
+use App\Http\Responses\PasskeyLoginResponse;
+/* @end-chisel-passkeys */
+/* @chisel-registration */
 use App\Http\Responses\RegisterResponse;
+/* @end-chisel-registration */
+/* @chisel-2fa */
 use App\Http\Responses\TwoFactorLoginResponse;
+/* @end-chisel-2fa */
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -17,10 +24,18 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
+/* @chisel-registration */
 use Laravel\Fortify\Contracts\RegisterResponse as RegisterResponseContract;
+/* @end-chisel-registration */
+/* @chisel-2fa */
 use Laravel\Fortify\Contracts\TwoFactorLoginResponse as TwoFactorLoginResponseContract;
+/* @end-chisel-2fa */
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
+/* @chisel-passkeys */
+use Laravel\Passkeys\Contracts\PasskeyLoginResponse as PasskeyLoginResponseContract;
+
+/* @end-chisel-passkeys */
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -30,8 +45,15 @@ class FortifyServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
+        /* @chisel-passkeys */
+        $this->app->singleton(PasskeyLoginResponseContract::class, PasskeyLoginResponse::class);
+        /* @end-chisel-passkeys */
+        /* @chisel-registration */
         $this->app->singleton(RegisterResponseContract::class, RegisterResponse::class);
+        /* @end-chisel-registration */
+        /* @chisel-2fa */
         $this->app->singleton(TwoFactorLoginResponseContract::class, TwoFactorLoginResponse::class);
+        /* @end-chisel-2fa */
     }
 
     /**
