@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Settings;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Settings\ProfileDeleteRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Http\Requests\Settings\ProfileUpdateRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 use Inertia\Response;
+use Laravel\WorkOS\Http\Requests\AuthKitAccountDeletionRequest;
+use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
 
 class ProfileController extends Controller
 {
@@ -18,26 +20,29 @@ class ProfileController extends Controller
     public function edit(Request $request): Response
     {
         return inertia('settings/Profile', [
-            'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
         ]);
     }
 
     /**
+     * Update the specified resource in storage.
+     */
+    public function update(ProfileUpdateRequest $request): RedirectResponse
+    {
+        $request->user()->update(['name' => $request->name]);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
+
+        return to_route('profile.edit');
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProfileDeleteRequest $request): RedirectResponse
+    public function destroy(AuthKitAccountDeletionRequest $request): SymfonyRedirectResponse
     {
-        $user = $request->user();
-
-        Auth::logout();
-
-        $user->deleteProfilePhoto();
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return to_route('home');
+        return $request->delete(
+            using: fn (User $user) => $user->delete(),
+        );
     }
 }

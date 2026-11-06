@@ -19,9 +19,6 @@ import {
     SheetTrigger,
 } from '@/components/ui/sheet';
 import { dashboard, login } from '@/routes';
-/* @chisel-registration */
-import { register } from '@/routes';
-/* @end-chisel-registration */
 import type { NavItem } from '@/types';
 import { toUrl } from '@/lib/utils';
 
@@ -106,16 +103,6 @@ const mainNavItems: NavItem[] = [
                                         Login
                                     </NavigationMenuLink>
                                 </NavigationMenuItem>
-                                <!-- @chisel-registration -->
-                                <NavigationMenuItem>
-                                    <NavigationMenuLink
-                                        :as="Link"
-                                        :href="register()"
-                                    >
-                                        Register
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
-                                <!-- @end-chisel-registration -->
                             </template>
                         </NavigationMenuList>
                     </SheetContent>

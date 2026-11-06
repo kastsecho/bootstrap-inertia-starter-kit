@@ -2,45 +2,32 @@
 
 namespace App\Models;
 
-use App\Concerns\HasProfilePhoto;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use Laravel\Fortify\Contracts\PasskeyUser;
-use Laravel\Fortify\PasskeyAuthenticatable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
 
 /**
  * @property int $id
  * @property string $name
  * @property string $email
  * @property Carbon|null $email_verified_at
- * @property string $password
- * @property string|null $profile_photo_path
- * @property string|null $avatar
- * @property string|null $two_factor_secret
- * @property string|null $two_factor_recovery_codes
- * @property Carbon|null $two_factor_confirmed_at
+ * @property string $workos_id
  * @property string|null $remember_token
+ * @property string $avatar
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  */
-#[Fillable(['name', 'email', 'password', 'profile_photo_path'])]
-#[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
-class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
+#[Fillable(['name', 'email', 'workos_id', 'avatar'])]
+#[Hidden(['workos_id', 'remember_token'])]
+class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory;
-
-    use HasProfilePhoto;
-    use Notifiable;
-    use PasskeyAuthenticatable;
-    use TwoFactorAuthenticatable;
+    use HasFactory, Notifiable;
 
     /**
      * Get the attributes that should be cast.
@@ -52,9 +39,6 @@ class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            /* @chisel-2fa */
-            'two_factor_confirmed_at' => 'datetime',
-            /* @end-chisel-2fa */
         ];
     }
 }

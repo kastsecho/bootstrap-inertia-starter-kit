@@ -7,7 +7,6 @@ import {
     Menu,
     Search,
     LogIn,
-    UserPlus,
 } from '@lucide/vue';
 import { computed } from 'vue';
 import AppLogo from '@/components/AppLogo.vue';
@@ -38,7 +37,7 @@ import UserMenuContent from '@/components/UserMenuContent.vue';
 import { useCurrentUrl } from '@/composables/useCurrentUrl';
 import { getInitials } from '@/composables/useInitials';
 import { toUrl } from '@/lib/utils';
-import { dashboard, home, login, register } from '@/routes';
+import { dashboard, home, login } from '@/routes';
 import type { BreadcrumbItem, NavItem } from '@/types';
 
 type Props = {
@@ -51,7 +50,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const page = usePage();
 const auth = computed(() => page.props.auth);
-const avatarKey = computed(() => auth.value.user.avatar || 'fallback');
 const { isCurrentUrl } = useCurrentUrl();
 
 const mainNavItems: NavItem[] = [
@@ -180,34 +178,16 @@ const rightNavItems: NavItem[] = [
                                         Login
                                     </NavigationMenuLink>
                                 </NavigationMenuItem>
-
-                                <!-- @chisel-registration -->
-                                <NavigationMenuItem>
-                                    <NavigationMenuLink
-                                        :as="Link"
-                                        class="icon-link"
-                                        :href="register()"
-                                        :active="isCurrentUrl(register())"
-                                    >
-                                        <UserPlus class="icon" />
-                                        Register
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
-                                <!-- @end-chisel-registration -->
                             </template>
 
-                            <DropdownMenu v-else variant="nav-item">
+                            <DropdownMenu variant="nav-item">
                                 <DropdownMenuTrigger
                                     type="button"
                                     class="nav-link"
                                     align="bottom-end"
                                     :caret="false"
                                 >
-                                    <Avatar
-                                        :key="avatarKey"
-                                        size="xs"
-                                        status="online"
-                                    >
+                                    <Avatar size="xs" status="online">
                                         <AvatarImage
                                             v-if="auth.user.avatar"
                                             :src="auth.user.avatar"

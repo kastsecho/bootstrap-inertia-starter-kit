@@ -4,18 +4,10 @@ import { computed } from 'vue';
 import DeleteUser from '@/components/DeleteUser.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
-/* @chisel-email-verification */
-import TextLink from '@/components/TextLink.vue';
-/* @end-chisel-email-verification */
-import UpdateAvatar from '@/components/UpdateAvatar.vue';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { edit } from '@/routes/profile';
-import { update } from '@/routes/user-profile-information';
-/* @chisel-email-verification */
-import { send } from '@/routes/verification';
-/* @end-chisel-email-verification */
+import { edit, update } from '@/routes/profile';
 
 setLayoutProps({
     breadcrumbs: [
@@ -48,17 +40,6 @@ const user = computed(() => page.props.auth.user);
             v-slot="{ errors, processing }"
         >
             <div class="d-grid form-field">
-                <Label for="photo">Avatar</Label>
-                <div class="d-flex align-items-center gap-5">
-                    <UpdateAvatar :user="user" :disabled="processing" />
-                </div>
-                <InputError
-                    :class="{ ['d-block']: errors.photo }"
-                    :message="errors.photo"
-                />
-            </div>
-
-            <div class="d-grid form-field">
                 <Label for="name">Name</Label>
                 <Input
                     id="name"
@@ -86,33 +67,6 @@ const user = computed(() => page.props.auth.user);
                     :invalid="!!errors.email"
                 />
                 <InputError :message="errors.email" />
-
-                <!-- @chisel-email-verification -->
-                <template
-                    v-if="page.props.mustVerifyEmail && !user.email_verified_at"
-                >
-                    <p
-                        class="form-text d-flex flex-column align-items-start mb-0"
-                    >
-                        Your email address is unverified.
-                        <TextLink
-                            :href="send()"
-                            as="button"
-                            class="btn btn-link btn-sm ps-0"
-                        >
-                            Click here to re-send the verification email.
-                        </TextLink>
-                    </p>
-
-                    <div
-                        v-if="page.props.status === 'verification-link-sent'"
-                        class="form-text fw-medium fg-success form-text"
-                    >
-                        A new verification link has been sent to your email
-                        address.
-                    </div>
-                </template>
-                <!-- @end-chisel-email-verification -->
             </div>
 
             <div class="d-flex items-center gap-5">

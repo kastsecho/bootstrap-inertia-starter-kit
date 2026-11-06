@@ -13,3 +13,4 @@ Route::get('/up', HealthCheckController::class)
     ->name('up');
 
 require base_path('routes/settings.php');
+require base_path('routes/auth.php');
