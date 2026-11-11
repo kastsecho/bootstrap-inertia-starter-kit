@@ -55,6 +55,52 @@ class ProfileUpdateTest extends TestCase
     }
 
     #[Test]
+    public function email_is_stored_in_lowercase_so_the_user_can_still_log_in(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->put(route('user-profile-information.update'), [
+                'name' => 'Test User',
+                'email' => 'Test@Example.com',
+            ]);
+
+        $response->assertValid();
+
+        $this->assertSame('test@example.com', $user->refresh()->email);
+
+        $this->post(route('logout'));
+
+        $this->post(route('login.store'), [
+            'email' => 'Test@Example.com',
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+    }
+
+    #[Test]
+    public function email_must_be_unique_regardless_of_case(): void
+    {
+        User::factory()->create(['email' => 'taken@example.com']);
+
+        $user = User::factory()->create();
+
+        $response = $this
+            ->actingAs($user)
+            ->from(route('profile.edit'))
+            ->put(route('user-profile-information.update'), [
+                'name' => 'Test User',
+                'email' => 'Taken@Example.com',
+            ]);
+
+        $response
+            ->assertInvalid('email', 'updateProfileInformation')
+            ->assertRedirect(route('profile.edit'));
+    }
+
+    #[Test]
     public function email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
     {
         $user = User::factory()->create();
