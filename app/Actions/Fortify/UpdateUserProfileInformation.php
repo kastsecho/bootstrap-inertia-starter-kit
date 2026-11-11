@@ -5,6 +5,7 @@ namespace App\Actions\Fortify;
 use App\Concerns\ProfileValidationRules;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
@@ -19,6 +20,10 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
      */
     public function update(User $user, array $input): void
     {
+        if (config('fortify.lowercase_usernames') && is_string($input['email'] ?? null)) {
+            $input['email'] = Str::lower($input['email']);
+        }
+
         Validator::make($input, [
             ...$this->profileRules($user->id),
             'photo' => $this->profilePhotoRules(),
