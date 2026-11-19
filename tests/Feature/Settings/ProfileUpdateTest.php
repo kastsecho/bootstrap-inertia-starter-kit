@@ -159,9 +159,10 @@ class ProfileUpdateTest extends TestCase
     }
 
     #[Test]
-    public function profile_photo_can_be_uploaded(): void
+    public function profile_avatar_can_be_uploaded(): void
     {
         $user = User::factory()->create();
+        $avatar = UploadedFile::fake()->image('avatar.jpg');
 
         Storage::fake('public');
 
@@ -171,7 +172,7 @@ class ProfileUpdateTest extends TestCase
             ->put(route('user-profile-information.update'), [
                 'name' => $user->name,
                 'email' => $user->email,
-                'photo' => UploadedFile::fake()->image('photo.jpg'),
+                'avatar' => $avatar,
             ]);
 
         $response
@@ -180,12 +181,14 @@ class ProfileUpdateTest extends TestCase
 
         $user->refresh();
 
-        $this->assertNotNull($user->profile_photo_path);
-        $this->assertTrue(Storage::disk('public')->exists($user->profile_photo_path));
+        $path = "profile-avatars/{$avatar->hashName()}";
+
+        $this->assertSame(Storage::disk('public')->url($path), $user->avatar);
+        Storage::disk('public')->assertExists($path);
     }
 
     #[Test]
-    public function profile_photo_can_be_deleted(): void
+    public function profile_avatar_can_be_deleted(): void
     {
         $user = User::factory()->create();
 
@@ -197,14 +200,14 @@ class ProfileUpdateTest extends TestCase
             ->put(route('user-profile-information.update'), [
                 'name' => $user->name,
                 'email' => $user->email,
-                'photo' => UploadedFile::fake()->image('photo.jpg'),
+                'avatar' => UploadedFile::fake()->image('avatar.jpg'),
             ]);
 
-        $oldPath = $user->profile_photo_path;
+        $oldPath = $user->avatar;
 
         $response = $this
             ->actingAs($user)
-            ->delete(route('profile-photo.destroy'));
+            ->delete(route('profile-avatar.destroy'));
 
         $response
             ->assertValid()
@@ -212,7 +215,7 @@ class ProfileUpdateTest extends TestCase
 
         $user->refresh();
 
-        $this->assertNull($user->profile_photo_path);
-        $this->assertFalse(Storage::disk('public')->exists($oldPath));
+        $this->assertNull($user->avatar);
+        Storage::disk('public')->assertMissing($oldPath);
     }
 }

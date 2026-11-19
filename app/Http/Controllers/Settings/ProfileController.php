@@ -32,7 +32,7 @@ class ProfileController extends Controller
 
         Auth::logout();
 
-        $user->deleteProfilePhoto();
+        $user->deleteProfileAvatar();
         $user->delete();
 
         $request->session()->invalidate();
