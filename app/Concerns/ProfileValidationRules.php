@@ -51,11 +51,11 @@ trait ProfileValidationRules
     }
 
     /**
-     * Get the validation rules used to validate user profile photos.
+     * Get the validation rules used to validate user avatars.
      *
      * @return array<int, Unique|ValidationRule|array<mixed>|string>
      */
-    protected function profilePhotoRules(): array
+    protected function avatarRules(): array
     {
         return ['nullable', 'mimes:jpg,jpeg,png', 'max:1024'];
     }

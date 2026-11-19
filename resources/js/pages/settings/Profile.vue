@@ -48,13 +48,13 @@ const user = computed(() => page.props.auth.user);
             v-slot="{ errors, processing }"
         >
             <div class="d-grid form-field">
-                <Label for="photo">Avatar</Label>
+                <Label for="avatar">Avatar</Label>
                 <div class="d-flex align-items-center gap-5">
                     <UpdateAvatar :user="user" :disabled="processing" />
                 </div>
                 <InputError
-                    :class="{ ['d-block']: errors.photo }"
-                    :message="errors.photo"
+                    :class="{ ['d-block']: errors.avatar }"
+                    :message="errors.avatar"
                 />
             </div>
 

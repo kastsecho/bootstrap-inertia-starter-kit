@@ -6,28 +6,28 @@ import { Button } from '@/components/ui/button';
 import { ImageInput } from '@/components/ui/input';
 import { getInitials } from '@/composables/useInitials';
 import type { User } from '@/types';
-import { destroy } from '@/routes/profile-photo';
+import { destroy } from '@/routes/profile-avatar';
 
 const props = defineProps<{
     user: User;
     disabled?: boolean;
 }>();
 
-const photoPreview = ref<string | null>(null);
-const photoSrc = computed(() => photoPreview.value || props.user.avatar);
-const photoInput = ref<InstanceType<typeof ImageInput> | null>(null);
+const avatarPreview = ref<string | null>(null);
+const avatarSrc = computed(() => avatarPreview.value || props.user.avatar);
+const avatarInput = ref<InstanceType<typeof ImageInput> | null>(null);
 
-const selectNewPhoto = () => {
-    photoInput.value?.click();
+const selectNewAvatar = () => {
+    avatarInput.value?.click();
 };
 
-const updatePhotoPreview = (payload: { src: string; file: File } | null) => {
-    photoPreview.value = payload?.src ?? null;
+const updateAvatarPreview = (payload: { src: string; file: File } | null) => {
+    avatarPreview.value = payload?.src ?? null;
 };
 
-const deletePhoto = () => {
-    updatePhotoPreview(null);
-    photoInput.value?.reset();
+const deleteAvatar = () => {
+    updateAvatarPreview(null);
+    avatarInput.value?.reset();
 
     if (!props.user.avatar) {
         return;
@@ -41,14 +41,14 @@ const deletePhoto = () => {
 
 <template>
     <ImageInput
-        ref="photoInput"
-        id="photo"
-        name="photo"
+        ref="avatarInput"
+        id="avatar"
+        name="avatar"
         hidden
-        @loaded="updatePhotoPreview"
+        @loaded="updateAvatarPreview"
     />
-    <Avatar :key="photoSrc" size="xl">
-        <AvatarImage v-if="photoSrc" :src="photoSrc" :alt="user.name" />
+    <Avatar :key="avatarSrc" size="xl">
+        <AvatarImage v-if="avatarSrc" :src="avatarSrc" :alt="user.name" />
         <AvatarFallback>
             {{ getInitials(user?.name) }}
         </AvatarFallback>
@@ -58,25 +58,25 @@ const deletePhoto = () => {
         type="button"
         variant="outline"
         theme="secondary"
-        @click="selectNewPhoto"
+        @click="selectNewAvatar"
         :tabindex="1"
         :disabled="disabled"
-        data-test="update-profile-photo-button"
+        data-test="update-profile-avatar-button"
     >
-        <template v-if="user.avatar">Change Photo</template>
-        <template v-else>Upload Photo</template>
+        <template v-if="user.avatar">Change Avatar</template>
+        <template v-else>Upload Avatar</template>
     </Button>
 
     <Button
-        v-if="photoSrc"
+        v-if="avatarSrc"
         type="button"
         variant="outline"
         theme="danger"
-        @click="deletePhoto"
+        @click="deleteAvatar"
         :tabindex="2"
         :disabled="disabled"
-        data-test="remove-profile-photo-button"
+        data-test="remove-profile-avatar-button"
     >
-        Remove Photo
+        Remove Avatar
     </Button>
 </template>

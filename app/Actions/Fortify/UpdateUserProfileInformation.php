@@ -26,11 +26,11 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 
         Validator::make($input, [
             ...$this->profileRules($user->id),
-            'photo' => $this->profilePhotoRules(),
+            'avatar' => $this->avatarRules(),
         ])->validateWithBag('updateProfileInformation');
 
-        if (isset($input['photo'])) {
-            $user->updateProfilePhoto($input['photo']);
+        if (isset($input['avatar'])) {
+            $user->updateProfileAvatar($input['avatar']);
         }
 
         if ($input['email'] !== $user->email) {
