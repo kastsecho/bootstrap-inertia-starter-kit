@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, setLayoutProps } from '@inertiajs/vue3';
+import { Head, setLayoutProps, usePage } from '@inertiajs/vue3';
 import { Alert } from '@/components/ui/alert';
 import {
     Card,
@@ -13,11 +13,15 @@ defineProps<{
     status?: string;
 }>();
 
+const page = usePage();
+
 setLayoutProps({
     breadcrumbs: [
         {
             title: 'Dashboard',
-            href: dashboard(),
+            href: page.props.currentTeam
+                ? dashboard(page.props.currentTeam.slug)
+                : '/',
         },
     ],
 });

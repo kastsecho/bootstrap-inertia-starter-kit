@@ -2,15 +2,17 @@
 import { computed } from 'vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/composables/useInitials';
-import type { User } from '@/types';
+import type { Team, User } from '@/types';
 
 type Props = {
     user: User;
     showEmail?: boolean;
+    team?: Team | null;
 };
 
 const props = withDefaults(defineProps<Props>(), {
     showEmail: false,
+    team: null,
 });
 
 const { getInitials } = useInitials();
@@ -31,7 +33,10 @@ const showAvatar = computed(
 
     <div class="d-grid not-prose flex-grow-1 text-left text-sm">
         <span class="text-truncate fw-medium">{{ user.name }}</span>
-        <span v-if="showEmail" class="fg-secondary text-truncate text-xs">
+        <span v-if="team" class="fg-secondary text-truncate text-xs">
+            {{ team.name }}
+        </span>
+        <span v-else-if="showEmail" class="fg-secondary text-truncate text-xs">
             {{ user.email }}
         </span>
     </div>
