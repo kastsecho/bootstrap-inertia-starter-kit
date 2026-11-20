@@ -1,22 +1,35 @@
-# Laravel + Bootstrap + Vue Starter Kit
+# Bootstrap + Inertia Starter Kit
 
-[![Build Status](https://github.com/kastsecho/vue-starter-kit/workflows/tests/badge.svg)](https://github.com/kastsecho/coreui-vue-starter-kit/actions)
-[![Total Downloads](https://img.shields.io/packagist/dt/kastsecho/vue-starter-kit)](https://packagist.org/packages/kastsecho/coreui-vue-starter-kit)
-[![Latest Stable Version](https://img.shields.io/packagist/v/kastsecho/vue-starter-kit)](https://packagist.org/packages/kastsecho/coreui-vue-starter-kit)
-[![Install with Herd](https://img.shields.io/badge/Install%20with%20Herd-f55247?logo=laravel&logoColor=white)](https://herd.laravel.com/new?starter-kit=kastsecho/vue-starter-kit)
+[![Build Status](https://github.com/kastsecho/bootstrap-inertia-starter-kit/actions/workflows/tests.yml/badge.svg)](https://github.com/kastsecho/bootstrap-inertia-starter-kit/actions)
+[![Total Downloads](https://img.shields.io/packagist/dt/kastsecho/bootstrap-inertia-starter-kit)](https://packagist.org/packages/kastsecho/bootstrap-inertia-starter-kit)
+[![Latest Version](https://img.shields.io/packagist/v/kastsecho/bootstrap-inertia-starter-kit?include_prereleases)](https://packagist.org/packages/kastsecho/bootstrap-inertia-starter-kit)
+[![Install with Herd](https://img.shields.io/badge/Install%20with%20Herd-f55247?logo=laravel&logoColor=white)](https://herd.laravel.com/new?starter-kit=kastsecho/bootstrap-inertia-starter-kit:dev-workos)
 
 ## Introduction
 
-Our Vue starter kit provides a robust, modern starting point for building Laravel applications with a Vue frontend using [Inertia](https://inertiajs.com).
+Our Bootstrap + Inertia starter kit provides a robust, modern starting point for building Laravel applications with a Vue frontend using [Inertia](https://inertiajs.com).
 
-This Vue starter kit utilizes Vue 3 and the Composition API, TypeScript, and the [Bootstrap 6](https://www.getbootstrap.com) component library.
+This Vue starter kit utilizes Vue 3 and the Composition API, TypeScript, and the [Bootstrap 6](https://getbootstrap.com) component library.
 
 ![Preview](/PREVIEW.png)
 
-## Official Documentation
+## Installation
 
-Documentation for all Laravel starter kits can be found on the [Laravel website](https://laravel.com/docs/starter-kits).
+To create a new Laravel application using this starter kit, run:
+
+```php
+laravel new my-app --using=kastsecho/bootstrap-inertia-starter-kit:dev-workos
+```
+
+## Documentation
+
+Documentation for this starter kit can be found on the following:
+
+- [Laravel](https://laravel.com/docs)
+- [Inertia](https://inertiajs.com/docs)
+- [Vue](https://vuejs.org/guide)
+- [Bootstrap](https://getbootstrap.com/docs)
 
 ## License
 
-The Laravel + Bootstrap + Vue starter kit is open-sourced software licensed under the MIT license.
+The Bootstrap + Inertia starter kit is open-sourced software licensed under the MIT license.
