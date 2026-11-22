@@ -4,9 +4,9 @@ import {
     BookOpen,
     FolderGit2,
     LayoutGrid,
+    LogIn,
     Menu,
     Search,
-    LogIn,
     UserPlus,
 } from '@lucide/vue';
 import { computed } from 'vue';
