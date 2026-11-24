@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { SelectValueProps } from 'reka-ui';
+import type { PrimitiveProps } from 'reka-ui';
 import { Primitive } from 'reka-ui';
 import type { HTMLAttributes } from 'vue';
 import { cn } from '@/lib/utils';
 
-interface Props extends SelectValueProps {
+interface Props extends PrimitiveProps {
     class?: HTMLAttributes['class'];
 }
 
@@ -20,6 +20,6 @@ const props = withDefaults(defineProps<Props>(), {
         :as-child="asChild"
         :class="cn('combobox-value', props.class)"
     >
-        {{ placeholder }}
+        <slot />
     </Primitive>
 </template>
