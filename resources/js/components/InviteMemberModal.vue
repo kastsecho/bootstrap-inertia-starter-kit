@@ -87,8 +87,11 @@ function handleOpenChange(value: boolean) {
                             name="role"
                             data-test="invite-role"
                         >
-                            <SelectTrigger :invalid="!!errors.role">
-                                <SelectValue placeholder="Select a role" />
+                            <SelectTrigger
+                                placeholder="Select a role"
+                                :invalid="!!errors.role"
+                            >
+                                <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem

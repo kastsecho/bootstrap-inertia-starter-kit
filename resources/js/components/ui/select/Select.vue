@@ -2,6 +2,8 @@
 import type { AcceptableValue, SelectRootProps } from 'reka-ui';
 import { provide, toRef, watch } from 'vue';
 
+defineOptions({ inheritAttrs: false });
+
 const props = defineProps<{
     defaultValue?: SelectRootProps['defaultValue'];
     disabled?: SelectRootProps['disabled'];

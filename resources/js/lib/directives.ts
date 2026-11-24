@@ -31,16 +31,6 @@ async function onUnmounted(
 }
 
 const combobox = {
-    beforeMount: async (el: HTMLElement) => {
-        const placeholder = el
-            .querySelector('.combobox-value')
-            ?.textContent?.trim();
-
-        if (placeholder) {
-            el.setAttribute('data-bs-placeholder', placeholder);
-        }
-    },
-
     mounted: async (el: HTMLElement) => {
         const { default: Combobox } =
             await import('bootstrap/js/dist/combobox');
