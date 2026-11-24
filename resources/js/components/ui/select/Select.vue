@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { AcceptableValue, SelectRootProps } from 'reka-ui';
-import { provide, watch } from 'vue';
+import { provide, toRef, watch } from 'vue';
 
 const props = defineProps<{
     defaultValue?: SelectRootProps['defaultValue'];
@@ -11,7 +11,8 @@ const props = defineProps<{
 
 const modelValue = defineModel<AcceptableValue | AcceptableValue[]>();
 provide('comboboxModelValue', modelValue);
-provide('comboboxMultiple', () => props.multiple);
+provide('comboboxMultiple', toRef(props, 'multiple'));
+provide('comboboxName', toRef(props, 'name'));
 
 watch(
     () => props.defaultValue,
@@ -33,18 +34,5 @@ watch(
 </script>
 
 <template>
-    <template v-if="name && !disabled">
-        <template v-if="multiple">
-            <input
-                v-for="value in Array.isArray(modelValue) ? modelValue : []"
-                :key="value"
-                type="hidden"
-                :name="`${name}[]`"
-                :value="value"
-            />
-        </template>
-        <input v-else type="hidden" :name="name" :value="modelValue ?? ''" />
-    </template>
-
     <slot />
 </template>

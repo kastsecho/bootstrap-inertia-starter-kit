@@ -19,12 +19,13 @@ const modelValue =
     inject<Ref<AcceptableValue | AcceptableValue[] | undefined>>(
         'comboboxModelValue',
     );
-const multiple = inject<() => boolean | undefined>('comboboxMultiple');
+const multiple = inject<Ref<boolean | undefined>>('comboboxMultiple');
+const name = inject<Ref<string | undefined>>('comboboxName');
 </script>
 
 <template>
     <Primitive
-        v-combobox="{ multiple: multiple?.() }"
+        v-combobox
         :class="
             cn(
                 'form-control combobox-toggle',
@@ -34,6 +35,8 @@ const multiple = inject<() => boolean | undefined>('comboboxMultiple');
         "
         type="button"
         data-bs-toggle="combobox"
+        :data-bs-multiple="multiple"
+        :data-bs-name="name"
         @combobox-change="
             modelValue = ($event as CustomEvent<string | string[]>).detail
         "

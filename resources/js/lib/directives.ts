@@ -30,15 +30,8 @@ async function onUnmounted(
     Component.getInstance(el)?.dispose();
 }
 
-export type ComboboxOptions = {
-    multiple?: boolean;
-};
-
 const combobox = {
-    mounted: async (
-        el: HTMLElement,
-        options: DirectiveBinding<ComboboxOptions>,
-    ) => {
+    mounted: async (el: HTMLElement) => {
         const { default: Combobox } =
             await import('bootstrap/js/dist/combobox');
 
@@ -54,7 +47,7 @@ const combobox = {
             );
         });
 
-        Combobox.getOrCreateInstance(el, options.value);
+        Combobox.getOrCreateInstance(el);
     },
 
     unmounted: (el: HTMLElement) =>

@@ -1,6 +1,5 @@
 import type { Directive } from 'vue';
 import type {
-    ComboboxOptions,
     DialogOptions,
     ToastOptions,
     TooltipOptions,
@@ -33,7 +32,7 @@ declare module '@inertiajs/core' {
 declare module 'vue' {
     interface GlobalDirectives {
         vFocus: Directive<HTMLElement, boolean | undefined>;
-        vCombobox: Directive<HTMLElement, ComboboxOptions>;
+        vCombobox: Directive<HTMLElement>;
         vDialog: Directive<HTMLElement, DialogOptions>;
         vOtp: Directive<HTMLElement>;
         vDrawer: Directive<HTMLElement>;
